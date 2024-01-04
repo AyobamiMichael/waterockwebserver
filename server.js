@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
 
+
+
+
 // TO be copied to AWS
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -52,6 +55,11 @@ app.listen(port, ()=>{
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
         .then(()=>console.log('MongoDB connected...'))
         .catch(err => console.log(err));
+
+  
+// For Mobile users signup and signin
+app.use(bodyParser.urlencoded({extended:true}))
+app.use('/', require('./mobileusersrouter'))        
     
  const Schema = mongoose.Schema;
 
@@ -469,13 +477,54 @@ app.post("/deletedrug", async (req, res)=>{
 
    app.get('/viewalldrugs', (req, res) =>{
     Drug.find()
-            .select('drugname mg pricepercard pricepercarton priceperpack pname paddress phone drugcategory expdate')
+            .select('drugname mg pricepercard pricepercarton priceperpack pname paddress phone drugcategory alternativedrugname alternativedrugprice alternativedrugmg time expdate')
             .exec((err, data) =>{
                 if(!err){
                     res.json(data)
                 }
             })
   });
+
+
+  app.get('/mobiledruglist', (req, res) =>{
+    Drug.find()
+            .select('drugname mg uname pricepercard pname paddress phone alternativedrugname alternativedrugprice alternativedrugmg time expdate')
+            .exec((err, data) =>{
+                if(!err){
+                    res.json(data)
+                }
+            })
+  });
+
+
+
+
+require("./mobilecartdetails")
+  const Product = mongoose.model("mobilecartlist");
+app.get('/mobiledrugcartlist', (req, res) =>{
+    Product.find()
+            .select('email price pharmaaddress price productname productmg distance')
+            .exec((err, data) =>{
+                if(!err){
+                    res.json(data)
+                }
+            })
+  });
+
+
+
+  require("./mobilehistorydetails")
+  const HistoryProducts = mongoose.model("mobilehistorylist");
+app.get('/mobiledrughistorylist', (req, res) =>{
+     HistoryProducts.find()
+            .select('email price pharmaaddress price productname productmg distance')
+            .exec((err, data) =>{
+                if(!err){
+                    res.json(data)
+                }
+            })
+  });
+
 
   /*
     app.get('/api/pharmacy', (req, res) =>{
