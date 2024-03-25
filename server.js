@@ -66,7 +66,8 @@ const barsfileFilter = (req, file, callback) =>{
 };
 const barsUpload = multer({storage: storageOfBarsResturantsImage, 
  limits: {
-  fileSize: 1024 * 1024 * 5
+  fileSize: 1024 * 1024 * 5,
+  files: 2
 },
  fileFilter: barsfileFilter
 });
