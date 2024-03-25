@@ -42,6 +42,42 @@ const upload = multer({storage: storage,
 
 // ..
 
+// FILE UPLOAD FOR BARS AND RESTURANT
+
+const storageOfBarsResturantsImage = multer.diskStorage({
+  destination: function(req, file, callback){
+   callback(null, './barsuploads/');
+
+  },
+  filename: function(req, file, callback){
+       callback(null, file.originalname)
+       
+  }
+});
+
+const barsfileFilter = (req, file, callback) =>{
+  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+   callback(null, true);
+  }else{
+   callback(null, false);
+ 
+  }
+ 
+};
+const barsUpload = multer({storage: storageOfBarsResturantsImage, 
+ limits: {
+  fileSize: 1024 * 1024 * 5
+},
+ fileFilter: barsfileFilter
+});
+
+
+//..
+
+
+
+
+
 const JWT_SECRET =
   "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
 
@@ -754,3 +790,46 @@ app.get('/mobiledrughistorylist', (req, res) =>{
     }
   });
   
+  // RESTURANTS AND BARS
+
+  const registerBarsAndResturants = mongoose.model("BarAndResturantsInfo");
+  //const storage = multer.memoryStorage();
+
+  app.post("/registerbars", barsUpload.array('barsImage'), async(req, res)=>{
+   const {barName, barAddress, barPhone, productPrice,productName,barManagerUserName,productDescription} = req.body;
+   console.log(req.file);
+   console.log(req.body);
+   
+   try{
+     
+     const existingBar = await registerBarsAndResturants.findOne({
+       productPrice,
+       productName,
+       barName,
+       barAddress
+
+   });
+
+   if (existingBar) {
+       return res.json({ status: "error", error: "Data already exists" });
+   }
+
+
+      await registerBarsAndResturants.create({
+        barName,
+        barAddress,
+        barPhone,
+        productPrice,
+        productImage: req.file.path,
+        productName,
+        productDescription,
+        barManagerUserName
+
+      });
+      res.send({ status: "ok" });
+
+     }catch(error){
+       res.send({ status: "error" });
+    }
+
+  });
