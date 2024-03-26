@@ -64,4 +64,21 @@ const ShoppingMallDataManagerSchema = new mongoose.Schema(
   );
   
   mongoose.model("ShoppingMallDataManagerInfo", ShoppingMallDataManagerSchema );
+
+
+
+  const BarManagerSchema = new mongoose.Schema(
+    {
+       fname: String,
+       lname: String,
+      uname: {type: String, unique: true},
+      password: String,
+    
+    },
+     {
+      collection: "BarManagerInfo",
+    }
+    );
+    
+    mongoose.model("BarManagerInfo", BarManagerSchema );
   
