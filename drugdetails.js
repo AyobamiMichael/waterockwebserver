@@ -57,3 +57,19 @@ const barSchema = new mongoose.Schema({
 })
 
 mongoose.model("BarAndResturantsInfo", barSchema);
+
+
+
+const barProductsSchema = new mongoose.Schema({
+  barName: {type: String, required: true},
+  barAddress: {type: String, required: true},
+  barPhone: {type: String, required: true},
+  barManagerUserName:{type: String, required: true},
+  productDescription:{type: String, required: true},
+  productPrice:{type: String, required: true},
+  productName:{type: String, required: true}
+ 
+})
+
+mongoose.model("BarProductsInfo", barProductsSchema);
+
