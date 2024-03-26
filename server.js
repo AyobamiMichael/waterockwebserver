@@ -575,7 +575,7 @@ app.get('/mobiledrughistorylist', (req, res) =>{
   });
   */
 
-
+  // SIGNUP SHOPPING MALL DATAMANAGER AND SIGN IN
   const ShoppingMallDataManager = mongoose.model("ShoppingMallDataManagerInfo");
   app.post("/registershoppingmalldatamanager", async(req, res)=>{
     const { fname, lname,  uname, password} = req.body;
@@ -793,19 +793,82 @@ app.get('/mobiledrughistorylist', (req, res) =>{
   
   // RESTURANTS AND BARS
 
+  // SIGNUP AND SIGNIN BARMANAGER
+  const BarManager = mongoose.model("BarManagerInfo");
+  app.post("/registerbarmanager", async(req, res)=>{
+    const { fname, lname,  uname, password} = req.body;
+
+    const encryptedPassword = await bcrypt.hash(password, 10);
+    try{
+        const oldUser = await BarManager.findOne({ uname });
+        if (oldUser) {
+            return res.json({ error: "User Exists" });
+          }
+
+       await BarManager.create({
+         fname,
+         lname,
+         uname,
+         password:encryptedPassword,
+
+       });
+       res.send({ status: "ok" });
+
+      }catch(error){
+        res.send({ status: "error" });
+     }
+ 
+   });
+
+  app.post("/loginbarmanager", async(req, res)=>{
+    const {uname, password } = req.body;
+    const user = await BarManager.findOne({uname});
+
+    if (!user) {
+        return res.json({ error: "User Not found" });
+      }
+      if (await bcrypt.compare(password, user.password)) {
+        const token = jwt.sign({uname: user.uname}, JWT_SECRET);
+        if (res.status(201)) {
+            return res.json({ status: "ok", data: token });
+          } else {
+            return res.json({ error: "error" });
+          }
+          
+      }
+      res.json({ status: "error", error: "InvAlid Password" });
+  });
+
+  app.post("/baramanagerdata", async (req, res) => {
+    const { token } = req.body;
+    try {
+      const user = jwt.verify(token, JWT_SECRET);
+      console.log(user);
+  
+      const username = user.uname;
+      BarManager.findOne({uname: username })
+        .then((data) => {
+          res.send({ status: "ok", data: data });
+        })
+        .catch((error) => {
+          res.send({ status: "error", data: error });
+        });
+    } catch (error) {}
+  });
+    
+
+  // REGISTER BAR
   const registerBarsAndResturants = mongoose.model("BarAndResturantsInfo");
   //const storage = multer.memoryStorage();
 
   app.post("/registerbars", barsUpload.array('barsImage'), async(req, res)=>{
-   const {barName, barAddress, barPhone, productPrice,productName,barManagerUserName,productDescription} = req.body;
+   const {barName, barAddress, barPhone,barManagerUserName} = req.body;
    console.log(req.file);
    console.log(req.body);
    
    try{
      
      const existingBar = await registerBarsAndResturants.findOne({
-       productPrice,
-       productName,
        barName,
        barAddress
 
@@ -822,6 +885,47 @@ app.get('/mobiledrughistorylist', (req, res) =>{
         barPhone,
         productPrice,
         productImage: req.file.path,
+        productName,
+        productDescription,
+        barManagerUserName
+
+      });
+      res.send({ status: "ok" });
+
+     }catch(error){
+       res.send({ status: "error" });
+    }
+
+  });
+  // ADD BAR PRODUCTS
+
+  const addBarsProducts = mongoose.model("BarProductsInfo");
+  //const storage = multer.memoryStorage();
+
+  app.post("/registerbarsproducts", async(req, res)=>{
+   const {barName, barAddress, barPhone, productPrice,productName,barManagerUserName,productDescription} = req.body;
+   console.log(req.file);
+   console.log(req.body);
+   
+   try{
+     
+     const existingBarProducts = await addBarsProducts.findOne({
+       productPrice,
+       productName,
+       barManagerUserName
+
+   });
+
+   if (existingBarProducts) {
+       return res.json({ status: "error", error: "Data already exists" });
+   }
+
+
+      await addBarsProducts.create({
+        barName,
+        barAddress,
+        barPhone,
+        productPrice,
         productName,
         productDescription,
         barManagerUserName
