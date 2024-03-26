@@ -883,10 +883,7 @@ app.get('/mobiledrughistorylist', (req, res) =>{
         barName,
         barAddress,
         barPhone,
-        productPrice,
         productImage: req.file.path,
-        productName,
-        productDescription,
         barManagerUserName
 
       });

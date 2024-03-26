@@ -28,7 +28,7 @@ const DrugDetailsScehma = new mongoose.Schema(
 mongoose.model("DrugDetails", DrugDetailsScehma);
 
 
-
+// FOR SHOPPING MALL
 const shopSchema = new mongoose.Schema({
   shopName: {type: String, required: true},
   shopAddress: {type: String, required: true},
@@ -45,3 +45,15 @@ const shopSchema = new mongoose.Schema({
 })
 
 mongoose.model("ShopInfo", shopSchema);
+
+// FOR BARS AND RESTURANTS
+
+const barSchema = new mongoose.Schema({
+  barName: {type: String, required: true},
+  barAddress: {type: String, required: true},
+  barPhone: {type: String, required: true},
+  barManagerUserName:{type: String, required: true}
+ 
+})
+
+mongoose.model("BarAndResturantsInfo", barSchema);
