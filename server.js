@@ -9,8 +9,6 @@ const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
 
 
-
-
 // TO be copied to AWS
 const multer = require('multer');
 const storage = multer.diskStorage({
