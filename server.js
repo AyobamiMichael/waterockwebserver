@@ -859,7 +859,7 @@ app.get('/mobiledrughistorylist', (req, res) =>{
   const registerBarsAndResturants = mongoose.model("BarAndResturantsInfo");
   //const storage = multer.memoryStorage();
 
-  app.post("/registerbars", barsUpload.array('barsImage'), async(req, res)=>{
+  app.post("/registerbars", barsUpload.array('barsImage', 2), async(req, res)=>{
    const {barName, barAddress, barPhone,barManagerUserName} = req.body;
    console.log(req.file);
    console.log(req.body);
