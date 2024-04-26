@@ -38,44 +38,6 @@ const upload = multer({storage: storage,
   fileFilter: fileFilter
 });
 
-// ..
-
-// FILE UPLOAD FOR BARS AND RESTURANT
-
-const storageOfBarsResturantsImage = multer.diskStorage({
-  destination: function(req, file, callback){
-   callback(null, './barsuploads/');
-
-  },
-  filename: function(req, file, callback){
-       callback(null, file.originalname)
-       
-  }
-});
-
-const barsfileFilter = (req, file, callback) =>{
-  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
-   callback(null, true);
-  }else{
-   callback(null, false);
- 
-  }
- 
-};
-const barsUpload = multer({storage: storageOfBarsResturantsImage, 
- limits: {
-  fileSize: 1024 * 1024 * 5,
-  files: 2
-},
- fileFilter: barsfileFilter
-});
-
-
-//..
-
-
-
-
 
 const JWT_SECRET =
   "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
@@ -856,11 +818,49 @@ app.get('/mobiledrughistorylist', (req, res) =>{
     
 
   // REGISTER BAR
+  app.use('/barsuploads', express.static('barsuploads'));  
   const registerBarsAndResturants = mongoose.model("BarAndResturantsInfo");
   //const storage = multer.memoryStorage();
+   
+  
+// FILE UPLOAD FOR BARS AND RESTURANT
 
-  app.post("/registerbars", barsUpload.array('barsImage', 2), async(req, res)=>{
-   const {barName, barAddress, barPhone,barManagerUserName} = req.body;
+const storageOfBarsResturantsImage = multer.diskStorage({
+  destination: function(req, file, callback){
+   callback(null, './baruploads/');
+
+  },
+  filename: function(req, file, callback){
+       callback(null, file.originalname)
+       
+  }
+});
+
+const barsfileFilter = (req, file, callback) =>{
+  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+   callback(null, true);
+  }else{
+   callback(null, false);
+ 
+  }
+ 
+};
+const barsUpload = multer({storage: storageOfBarsResturantsImage, 
+ limits: {
+  fileSize: 1024 * 1024 * 5,
+  
+},
+ fileFilter: barsfileFilter
+});
+
+
+
+
+//const barsUpload = multer({storage: storageOfBarsResturantsImage,  limits: { files: 2 } });
+
+
+  app.post("/registerbars", barsUpload.single('barImage'), async(req, res)=>{
+   const {barName, barAddress, barPhone, barState, barManagerUserName} = req.body;
    console.log(req.file);
    console.log(req.body);
    
@@ -874,23 +874,31 @@ app.get('/mobiledrughistorylist', (req, res) =>{
 
    if (existingBar) {
        return res.json({ status: "error", error: "Data already exists" });
-   }
+      }
 
+     // if (req.files.length > 2) {
+      //  return res.status(400).json({ status: "error", error: "Maximum number of files exceeded (limit: 2)" });
+     // }
+  
+  //const barImages = req.files.map(file => file.path);
+   //console.log(barImages);
 
       await registerBarsAndResturants.create({
         barName,
         barAddress,
         barPhone,
-        productImage: req.file.path,
-        barManagerUserName
+        barState,
+        barManagerUserName,
+        barImage: req.file.path
 
+      
       });
       res.send({ status: "ok" });
 
      }catch(error){
        res.send({ status: "error" });
+       //console.log(res);
     }
-
   });
   // ADD BAR PRODUCTS
 
@@ -933,3 +941,8 @@ app.get('/mobiledrughistorylist', (req, res) =>{
     }
 
   });
+
+
+
+    //productImage: req.file.path,
+       // barManagerUserName

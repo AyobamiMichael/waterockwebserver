@@ -52,12 +52,13 @@ const barSchema = new mongoose.Schema({
   barName: {type: String, required: true},
   barAddress: {type: String, required: true},
   barPhone: {type: String, required: true},
-  barManagerUserName:{type: String, required: true}
- 
+  barManagerUserName:{type: String, required: true},
+  barImage:{type: String, required: true}
+  
 })
 
 mongoose.model("BarAndResturantsInfo", barSchema);
-
+// barManagerUserName:{type: String, required: true}
 
 
 const barProductsSchema = new mongoose.Schema({
