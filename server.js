@@ -818,7 +818,7 @@ app.get('/mobiledrughistorylist', (req, res) =>{
     
 
   // REGISTER BAR
-  app.use('/barsuploads', express.static('barsuploads'));  
+  //app.use('/barsuploads', express.static('barsuploads'));  
   const registerBarsAndResturants = mongoose.model("BarAndResturantsInfo");
   //const storage = multer.memoryStorage();
    
@@ -827,7 +827,7 @@ app.get('/mobiledrughistorylist', (req, res) =>{
 
 const storageOfBarsResturantsImage = multer.diskStorage({
   destination: function(req, file, callback){
-   callback(null, './baruploads/');
+   callback(null, './uploads/');
 
   },
   filename: function(req, file, callback){

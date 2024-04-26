@@ -53,7 +53,7 @@ const barSchema = new mongoose.Schema({
   barAddress: {type: String, required: true},
   barPhone: {type: String, required: true},
   barManagerUserName:{type: String, required: true},
-  barImage:{type: String, required: true}
+  barImage:{type: String, required: false}
   
 })
 
