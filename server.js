@@ -848,7 +848,7 @@ const barsfileFilter = (req, file, callback) =>{
 const barsUpload = multer({storage: storageOfBarsResturantsImage, 
  limits: {
   fileSize: 1024 * 1024 * 5,
-  files: 2
+  //files: 2
   
 },
  fileFilter: barsfileFilter
@@ -860,7 +860,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 //const barsUpload = multer({storage: storageOfBarsResturantsImage,  limits: { files: 2 } });
 
 
-  app.post("/registerbars", barsUpload.array('barImages'), async(req, res)=>{
+  app.post("/registerbars", barsUpload.single('barImage'), async(req, res)=>{
    const {barName, barAddress, barPhone, barState, barManagerUserName} = req.body;
    console.log(req.file);
    console.log(req.body);
@@ -877,9 +877,9 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
        return res.json({ status: "error", error: "Data already exists" });
       }
 
-      if (req.files.length > 2) {
-        return res.status(400).json({ status: "error", error: "Maximum number of files exceeded (limit: 2)" });
-       }
+     // if (req.files.length > 2) {
+       // return res.status(400).json({ status: "error", error: "Maximum number of files exceeded (limit: 2)" });
+      // }
   
   const barImages = req.files.map(file => file.path);
    console.log(barImages);
@@ -890,7 +890,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
         barPhone,
         barState,
         barManagerUserName,
-        barImages: barImages      
+        barImage: req.file.path      
       });
       res.send({ status: "ok" });
 
