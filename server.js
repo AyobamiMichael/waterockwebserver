@@ -861,7 +861,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
 
   app.post("/registerbars", barsUpload.single('barImage'), async(req, res)=>{
-   const {barName, barAddress, barPhone, barState, barManagerUserName} = req.body;
+   const {barName, barAddress, barState, barPhone, barManagerUserName} = req.body;
    console.log(req.file);
    console.log(req.body);
    
@@ -882,17 +882,19 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
       // }
   
   //const barImages = req.files.map(file => file.path);
-   console.log(barImages);
+   //console.log(barImages);
 
       await registerBarsAndResturants.create({
         barName,
         barAddress,
-        barPhone,
         barState,
+        barPhone,
+        barImage: req.file.path,   
         barManagerUserName,
-        barImage: req.file.path      
+         
       });
       res.send({ status: "ok" });
+
 
      }catch(error){
        res.send({ status: "error" });
