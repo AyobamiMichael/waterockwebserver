@@ -51,6 +51,7 @@ mongoose.model("ShopInfo", shopSchema);
 const barSchema = new mongoose.Schema({
   barName: {type: String, required: true},
   barAddress: {type: String, required: true},
+  barState:{type: String, reguired: true},
   barPhone: {type: String, required: true},
   barManagerUserName:{type: String, required: true},
   barImage:{type: String, required: false},
