@@ -881,7 +881,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
        // return res.status(400).json({ status: "error", error: "Maximum number of files exceeded (limit: 2)" });
       // }
   
-  const barImages = req.files.map(file => file.path);
+  //const barImages = req.files.map(file => file.path);
    console.log(barImages);
 
       await registerBarsAndResturants.create({
