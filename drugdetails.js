@@ -64,14 +64,11 @@ mongoose.model("BarAndResturantsInfo", barSchema);
 
 
 const barProductsSchema = new mongoose.Schema({
-  barName: {type: String, required: true},
-  barAddress: {type: String, required: true},
-  barPhone: {type: String, required: true},
+  catSelected: {type: String, required: true},
+  otherProductName: {type: String, required: false},
+  productPrice: {type: String, required: true},
   barManagerUserName:{type: String, required: true},
-  productDescription:{type: String, required: true},
-  productPrice:{type: String, required: true},
-  productName:{type: String, required: true}
- 
+  otherProductImage:{type: String, required: false}
 })
 
 mongoose.model("BarProductsInfo", barProductsSchema);

@@ -903,11 +903,13 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
   });
   // ADD BAR PRODUCTS
 
+
+
   const addBarsProducts = mongoose.model("BarProductsInfo");
   //const storage = multer.memoryStorage();
 
-  app.post("/registerbarsproducts", async(req, res)=>{
-   const {barName, barAddress, barPhone, productPrice,productName,barManagerUserName,productDescription} = req.body;
+  app.post("/registerbarsproducts", barsUpload.single('otherProductImage'), async(req, res)=>{
+   const {catSelected, otherProductName, productPrice, barManagerUserName,otherProductImage} = req.body;
    console.log(req.file);
    console.log(req.body);
    
@@ -926,13 +928,11 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
 
       await addBarsProducts.create({
-        barName,
-        barAddress,
-        barPhone,
+        catSelected,
+        otherProductName,
         productPrice,
-        productName,
-        productDescription,
-        barManagerUserName
+        barManagerUserName,
+        otherProductImage: req.file.path
 
       });
       res.send({ status: "ok" });
