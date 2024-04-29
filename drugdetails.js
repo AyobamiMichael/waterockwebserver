@@ -60,7 +60,7 @@ const barSchema = new mongoose.Schema({
 })
 
 mongoose.model("BarAndResturantsInfo", barSchema);
-// barManagerUserName:{type: String, required: true}
+
 
 
 const barProductsSchema = new mongoose.Schema({
@@ -68,8 +68,11 @@ const barProductsSchema = new mongoose.Schema({
   otherProductName: {type: String, required: false},
   productPrice: {type: String, required: true},
   barManagerUserName:{type: String, required: true},
-  otherProductImage:{type: String, required: false}
+
 })
 
 mongoose.model("BarProductsInfo", barProductsSchema);
 
+
+
+ // otherProductImage:{type: String, required: false}
