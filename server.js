@@ -1018,7 +1018,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
           }
         console.log(req.file);
         console.log(req.body);
-       await BarProduct.create({
+       await NewBarProducts.create({
         catSelected,
          otherProductName,
          otherProductImage: req.file.path,
