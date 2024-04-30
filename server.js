@@ -904,9 +904,9 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
   // ADD BAR PRODUCTS
 
 
-
+/*
   const addBarsProducts = mongoose.model("BarProductsInfo");
-  //const storage = multer.memoryStorage();
+  
 
   app.post("/registerbarsproducts", async(req, res)=>{
    const {catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
@@ -943,6 +943,36 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
   });
 
+ */
 
+  
+  const BarProduct = mongoose.model("BarProductsInfo");
+  app.post("/registerbarproductinfo", async(req, res)=>{
+    const { catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
+
+    
+    try{
+        const oldProduct = await BarProduct.findOne({ catSelected, productPrice });
+        if (oldProduct) {
+            return res.json({ error: "Product Exists" });
+          }
+        //console.log(req.file);
+        console.log(req.body);
+       await BarProduct.create({
+        catSelected,
+         otherProductName,
+         productPrice,
+         barManagerUserName
+
+       });
+       res.send({ status: "ok" });
+
+      }catch(error){
+        res.send({ status: "error" });
+     }
+ 
+   });
+
+  
 
     
