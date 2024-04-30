@@ -75,4 +75,14 @@ mongoose.model("BarProductsInfo", barProductsSchema);
 
 
 
- // otherProductImage:{type: String, required: false}
+const newBarProductsSchema = new mongoose.Schema({
+  catSelected: {type: String, required: true},
+  otherProductName: {type: String, required: false},
+  otherProductImage:{type: String, required: false},
+  productPrice: {type: String, required: true},
+  barManagerUserName:{type: String, required: true},
+ 
+})
+
+mongoose.model("NewBarProductsInfo", newBarProductsSchema);
+

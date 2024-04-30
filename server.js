@@ -945,7 +945,8 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
  */
 
-  
+
+
   const BarProduct = mongoose.model("BarProductsInfo");
   app.post("/registerbarproductinfo", async(req, res)=>{
     const { catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
@@ -973,6 +974,62 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
  
    });
 
+   
+   
+   const newStorageOfBarsResturantsImage = multer.diskStorage({
+    destination: function(req, file, callback){
+     callback(null, './uploads/');
   
+    },
+    filename: function(req, file, callback){
+         callback(null, file.originalname)
+         
+    }
+  });
+  
+  const newBarsfileFilter = (req, file, callback) =>{
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+     callback(null, true);
+    }else{
+     callback(null, false);
+   
+    }
+   
+  };
+  const newBarsUpload = multer({storage: newStorageOfBarsResturantsImage, 
+   limits: {
+    fileSize: 1024 * 1024 * 5,
+    //files: 2
+    
+  },
+   fileFilter: newBarsfileFilter
+  });
+
+
+   const NewBarProducts = mongoose.model("NewBarProductsInfo");
+   app.post("/newregisterbarproductinfo", newBarsUpload.single('otherProductImage'), async(req, res)=>{
+    const { catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
 
     
+    try{
+        const oldProduct = await NewBarProducts.findOne({ catSelected, productPrice });
+        if (oldProduct) {
+            return res.json({ error: "Product Exists" });
+          }
+        console.log(req.file);
+        console.log(req.body);
+       await BarProduct.create({
+        catSelected,
+         otherProductName,
+         otherProductImage: req.file.path,
+         productPrice,
+         barManagerUserName
+
+       });
+       res.send({ status: "ok" });
+
+      }catch(error){
+        res.send({ status: "error" });
+     }
+ 
+   });
