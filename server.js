@@ -904,49 +904,6 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
   // ADD BAR PRODUCTS
 
 
-/*
-  const addBarsProducts = mongoose.model("BarProductsInfo");
-  
-
-  app.post("/registerbarsproducts", async(req, res)=>{
-   const {catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
-   console.log(req.file);
-   console.log(req.body);
-   
-   try{
-     
-     const existingBarProducts = await addBarsProducts.findOne({
-       productPrice,
-       productName,
-       barManagerUserName
-
-   });
-
-   if (existingBarProducts) {
-       return res.json({ status: "error", error: "Data already exists" });
-   }
-
-
-      await addBarsProducts.create({
-        catSelected,
-        otherProductName,
-        productPrice,
-        barManagerUserName,
-
-
-      });
-      res.send({ status: "ok" });
-
-     }catch(error){
-       res.send({ status: "error" });
-    }
-
-  });
-
- */
-
-
-
   const BarProduct = mongoose.model("BarProductsInfo");
   app.post("/registerbarproductinfo", async(req, res)=>{
     const { catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
@@ -974,62 +931,44 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
  
    });
 
-   
-   
-   const newStorageOfBarsResturantsImage = multer.diskStorage({
-    destination: function(req, file, callback){
-     callback(null, './uploads/');
   
-    },
-    filename: function(req, file, callback){
-         callback(null, file.originalname)
-         
-    }
-  });
+   // RETRIEVE ALL BAR PRODUCTS
+
   
-  const newBarsfileFilter = (req, file, callback) =>{
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
-     callback(null, true);
-    }else{
-     callback(null, false);
-   
-    }
-   
-  };
-  const newBarsUpload = multer({storage: newStorageOfBarsResturantsImage, 
-   limits: {
-    fileSize: 1024 * 1024 * 5,
-    //files: 2
-    
-  },
-   fileFilter: newBarsfileFilter
+   app.get('/barproducts/:barManagerUserName', (req, res) =>{
+    const { barManagerUserName } = req.params;
+    BarProduct.find({barManagerUserName: barManagerUserName })
+            .select('_id catSelected otherProductName productPrice barManagerUserName')
+            .exec((err, data) =>{
+              if (!err) {
+                res.json(data);
+               // console.log(data);
+            } else {
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+            })
+      //   console.log(res);
   });
 
+   
+  app.post("/updateandsavebarproduct", async (req, res)=>{
+    const productId = req.params._id;
+  //  const {id,  catSelected,  productName,  productPrice, shopAddress, shopName, shopPhone} = req.body;
+    const { editedProduct } = req.body;
+      //console.log(productId);
+      //console.log(editedProduct.productName);
+         try{
+            BarProduct.findByIdAndUpdate(productId, {productName: editedProduct.productName, productPrice:editedProduct.productPrice}, {new: true}, (error, data)=>{
+            // if(error){
+             //   console.log(error);
+            // }else{
+             // console.log('Updated');
+            // } 
+          })
+          res.send({ status: "ok" });
+         }catch(error){
+          res.send({ status: "error" });
+         }
+       
 
-   const NewBarProducts = mongoose.model("NewBarProductsInfo");
-   app.post("/newregisterbarproductinfo", newBarsUpload.single('otherProductImage'), async(req, res)=>{
-    const { catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
-
-    
-    try{
-        const oldProduct = await NewBarProducts.findOne({ catSelected, productPrice });
-        if (oldProduct) {
-            return res.json({ error: "Product Exists" });
-          }
-        console.log(req.file);
-        console.log(req.body);
-       await NewBarProducts.create({
-        catSelected,
-         otherProductName,
-         otherProductImage: req.file.path,
-         productPrice,
-         barManagerUserName
-
-       });
-       res.send({ status: "ok" });
-
-      }catch(error){
-        res.send({ status: "error" });
-     }
- 
-   });
+  })
