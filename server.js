@@ -935,7 +935,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
    // RETRIEVE ALL BAR PRODUCTS
 
   
-   app.get('/barproducts/:barManagerUserName', (req, res) =>{
+   /*app.get('/barproducts/:barManagerUserName', (req, res) =>{
     const { barManagerUserName } = req.params;
     BarProduct.find({barManagerUserName: barManagerUserName })
             .select('_id catSelected otherProductName productPrice barManagerUserName')
@@ -949,26 +949,46 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
             })
       //   console.log(res);
   });
+  */
 
+ 
    
-  app.post("/updateandsavebarproduct", async (req, res)=>{
-    const productId = req.params._id;
-  //  const {id,  catSelected,  productName,  productPrice, shopAddress, shopName, shopPhone} = req.body;
-    const { editedProduct } = req.body;
-      //console.log(productId);
-      //console.log(editedProduct.productName);
-         try{
-            BarProduct.findByIdAndUpdate(productId, {productName: editedProduct.productName, productPrice:editedProduct.productPrice}, {new: true}, (error, data)=>{
-            // if(error){
-             //   console.log(error);
-            // }else{
-             // console.log('Updated');
-            // } 
-          })
-          res.send({ status: "ok" });
-         }catch(error){
-          res.send({ status: "error" });
-         }
-       
+  app.get('/barproducts', (req, res) =>{
+   // const { barManagerUserName } = req.params;
+    BarProduct.find()
+            .select('_id catSelected otherProductName productPrice barManagerUserName')
+            .exec((err, data) =>{
+              if (!err) {
+                res.json(data);
+               // console.log(data);
+            } else {
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+            })
+      //   console.log(res);
+  });
 
-  })
+
+  app.post("/updateandsavebarproduct", async (req, res) => {
+    const productId = req.body._id; // Access _id from req.body
+    const { editedProduct } = req.body;
+    try {
+        BarProduct.findByIdAndUpdate(
+            productId,
+            { productPrice: editedProduct.productPrice },
+            { new: true },
+            (error, data) => {
+                if (error) {
+                    console.log(error);
+                    res.status(500).send({ status: "error" }); // Send error response
+                } else {
+                    console.log('Updated');
+                    res.send({ status: "ok" }); // Send success response
+                }
+            }
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error" }); // Send error response
+    }
+});
