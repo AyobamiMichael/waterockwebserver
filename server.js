@@ -901,6 +901,27 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
        //console.log(res);
     }
   });
+
+
+ // RETREIVE ALL THE BARS
+
+ app.get('/allbars', (req, res) =>{
+  // const { barManagerUserName } = req.params;
+  registerBarsAndResturants.find()
+           .select('_id barName barAddress barState barPhone barImage barManagerUserName')
+           .exec((err, data) =>{
+             if (!err) {
+               res.json(data);
+              // console.log(data);
+           } else {
+               res.status(500).json({ error: 'Internal Server Error' });
+           }
+           })
+     //   console.log(res);
+ });
+
+
+
   // ADD BAR PRODUCTS
 
 
