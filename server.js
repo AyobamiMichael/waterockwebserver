@@ -970,25 +970,26 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
 
   app.post("/updateandsavebarproduct", async (req, res) => {
-    const productId = req.body._id; // Access _id from req.body
-    const { editedProduct } = req.body;
+   // const productId = req.body._id; 
+    const { id, updatedPrice } = req.body;
+    console.log(req.body);
     try {
         BarProduct.findByIdAndUpdate(
-            productId,
-            { productPrice: editedProduct.productPrice },
+            id,
+            { productPrice: updatedPrice },
             { new: true },
             (error, data) => {
                 if (error) {
                     console.log(error);
-                    res.status(500).send({ status: "error" }); // Send error response
+                    res.status(500).send({ status: "error" });
                 } else {
                     console.log('Updated');
-                    res.send({ status: "ok" }); // Send success response
+                    res.send({ status: "ok", data: 'Updated Successfuly' });
                 }
             }
         );
     } catch (error) {
         console.error(error);
-        res.status(500).send({ status: "error" }); // Send error response
+        res.status(500).send({ status: "error" });
     }
 });
