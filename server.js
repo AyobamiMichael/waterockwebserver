@@ -910,7 +910,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
     
     try{
-        const oldProduct = await BarProduct.findOne({ catSelected, productPrice });
+        const oldProduct = await BarProduct.findOne({ catSelected, productPrice, barManagerUserName });
         if (oldProduct) {
             return res.json({ error: "Product Exists" });
           }
