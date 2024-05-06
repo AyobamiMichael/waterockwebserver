@@ -978,7 +978,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
   app.get('/barproducts', (req, res) =>{
    // const { barManagerUserName } = req.params;
     BarProduct.find()
-            .select('_id catSelected otherProductName productPrice barManagerUserName')
+            .select('_id catSelected barName otherProductName productPrice barManagerUserName')
             .exec((err, data) =>{
               if (!err) {
                 res.json(data);
