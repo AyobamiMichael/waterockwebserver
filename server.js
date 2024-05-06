@@ -927,7 +927,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
   const BarProduct = mongoose.model("BarProductsInfo");
   app.post("/registerbarproductinfo", async(req, res)=>{
-    const { catSelected, otherProductName, productPrice, barManagerUserName} = req.body;
+    const { catSelected, barName, otherProductName, productPrice, barManagerUserName} = req.body;
 
     
     try{
@@ -939,6 +939,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
         console.log(req.body);
        await BarProduct.create({
         catSelected,
+         barName,
          otherProductName,
          productPrice,
          barManagerUserName
