@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Pharma Soft
+        </title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="container">
+         <form id="pharmacy-form" method="post" action="/api/users">
+            <h1>Register Pharmacy</h1>
+            <input id="pharmaname" type="text" name="pharmaname" placeholder="Enter Pharmacy Name*"/>
+            <input id="drugname" type="text" name="drugname" placeholder="Enter Drug Name*"/>
+            <input id="address" type="text" name="address" placeholder="Address*"/>
+            <input id="price" type="text" name="price" placeholder="Price*"/>
+            <input id="phone" type="text" name="phone" placeholder="phone*"/>
+            <input type="submit" value="Submit" />
+         </form>
+        </div>
+        <script>
+             const pharmaform = document.getElementById('pharma-form');
+             pharmaform.addEventListener('submit', () =>{
+
+             pharmaform.submit();
+             });
+        </script>
+    </body>
+</html>
