@@ -905,6 +905,23 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
   });
 
 
+
+  app.post('/incrementViews', async (req, res) => {
+    try {
+      const { barName } = req.body;
+      const bar = await registerBarsAndResturants.findOne({ barName });
+  
+      if (bar) {
+        bar.barNumberOfViews += 1;
+        await bar.save();
+        res.status(200).send({ status: 'ok' });
+      } else {
+        res.status(404).send({ status: 'bar not found' });
+      }
+    } catch (error) {
+      res.status(500).send({ status: 'error', error: error.message });
+    }
+  }); 
  // RETREIVE ALL THE BARS
 
  app.get('/allbars', (req, res) =>{
