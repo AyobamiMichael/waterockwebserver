@@ -54,7 +54,10 @@ const barSchema = new mongoose.Schema({
   barState:{type: String, reguired: true},
   barPhone: {type: String, required: true},
   barImage:{type: String, required: false},
+  businessType:{type: String, required: true},
+  barNumberOfViews:{type: String, required: false},
   barManagerUserName:{type: String, required: true},
+
   
  
 })
