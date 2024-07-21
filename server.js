@@ -922,6 +922,24 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
      //   console.log(res);
  });
 
+ // BAR NUMBER OF VIEWS
+
+ app.post('/incrementViews', async (req, res) => {
+  try {
+    const { barName } = req.body;
+    const bar = await registerBarsAndResturants.findOne({ barName });
+
+    if (bar) {
+      bar.barNumberOfViews += 1;
+      await bar.save();
+      res.status(200).send({ status: 'ok' });
+    } else {
+      res.status(404).send({ status: 'bar not found' });
+    }
+  } catch (error) {
+    res.status(500).send({ status: 'error', error: error.message });
+  }
+});
 
 
   // ADD BAR PRODUCTS
@@ -929,7 +947,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
   const BarProduct = mongoose.model("BarProductsInfo");
   app.post("/registerbarproductinfo", async(req, res)=>{
-    const { catSelected, barName, otherProductName, productPrice, barManagerUserName, productNumberOfViews} = req.body;
+    const { catSelected, barName, otherProductName, productPrice, barManagerUserName} = req.body;
 
     
     try{
@@ -944,8 +962,8 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
          barName,
          otherProductName,
          productPrice,
-         barManagerUserName,
-         productNumberOfViews
+         barManagerUserName
+        
 
        });
        res.send({ status: "ok" });
@@ -981,7 +999,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
   app.get('/barproducts', (req, res) =>{
    // const { barManagerUserName } = req.params;
     BarProduct.find()
-            .select('_id catSelected barName otherProductName productPrice barManagerUserName productNumberOfViews')
+            .select('_id catSelected barName otherProductName productPrice barManagerUserName')
             .exec((err, data) =>{
               if (!err) {
                 res.json(data);
