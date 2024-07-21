@@ -861,7 +861,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
 
   app.post("/registerbars", barsUpload.single('barImage'), async(req, res)=>{
-   const {barName, barAddress, barState, barPhone, businessType, barManagerUserName} = req.body;
+   const {barName, barAddress, barState, barPhone, businessType, barManagerUserName, barNumberOfViews} = req.body;
    console.log(req.file);
    console.log(req.body);
    
@@ -892,6 +892,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
         businessType,
         barImage: req.file.path,   
         barManagerUserName,
+        barNumberOfViews
          
       });
       res.send({ status: "ok" });
@@ -928,7 +929,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
   const BarProduct = mongoose.model("BarProductsInfo");
   app.post("/registerbarproductinfo", async(req, res)=>{
-    const { catSelected, barName, otherProductName, productPrice, barManagerUserName} = req.body;
+    const { catSelected, barName, otherProductName, productPrice, barManagerUserName, productNumberOfViews} = req.body;
 
     
     try{
@@ -943,7 +944,8 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
          barName,
          otherProductName,
          productPrice,
-         barManagerUserName
+         barManagerUserName,
+         productNumberOfViews
 
        });
        res.send({ status: "ok" });
@@ -955,6 +957,9 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
    });
 
   
+
+   //ADD NUMBER OF VIEWS TO BARS USING BarUserName
+
    // RETRIEVE ALL BAR PRODUCTS
 
   
