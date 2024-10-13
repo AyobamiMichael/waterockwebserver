@@ -1,3 +1,4 @@
+const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
 
 
@@ -57,6 +58,8 @@ const barSchema = new mongoose.Schema({
   businessType:{type: String, required: true},
   barNumberOfViews:{type: Number, required: true},
   barManagerUserName:{type: String, required: true},
+  rating:{type: String, required: true},
+  customerReview:{type: String, required: true}
 
   
  
