@@ -927,13 +927,15 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
   app.post('/customerreview', async (req, res) => {
     try {
-      const { barName, customerReview } = req.body;
+      const { barName, customerReview, rating } = req.body;
       const bar = await registerBarsAndResturants.findOne({ barName });
   
       if (bar) {
         // Add the customer review to the bar's customer reviews (assuming it's an array)
         bar.customerReview = bar.customerReview || []; // Initialize if not exists
         bar.customerReview.push(customerReview);
+        bar.rating = bar.rating || [];
+        bar.rating.push(rating);
   
         await bar.save();
         res.status(200).send({ status: 'ok', message: 'Review added successfully' });
