@@ -924,6 +924,27 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
       res.status(500).send({ status: 'error', error: error.message });
     }
   }); 
+
+  app.post('/customerreview', async (req, res) => {
+    try {
+      const { barName, customerReview } = req.body;
+      const bar = await registerBarsAndResturants.findOne({ barName });
+  
+      if (bar) {
+        // Add the customer review to the bar's customer reviews (assuming it's an array)
+        bar.customerReview = bar.customerReview || []; // Initialize if not exists
+        bar.customerReview.push(customerReview);
+  
+        await bar.save();
+        res.status(200).send({ status: 'ok', message: 'Review added successfully' });
+      } else {
+        res.status(404).send({ status: 'bar not found' });
+      }
+    } catch (error) {
+      res.status(500).send({ status: 'error', error: error.message });
+    }
+  });
+  
  // RETREIVE ALL THE BARS
 
  app.get('/allbars', (req, res) =>{
