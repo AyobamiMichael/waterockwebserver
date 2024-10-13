@@ -861,7 +861,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
 
 
   app.post("/registerbars", barsUpload.single('barImage'), async(req, res)=>{
-   const {barName, barAddress, barState, barPhone, businessType, barManagerUserName, barNumberOfViews} = req.body;
+   const {barName, barAddress, barState, barPhone, businessType, barManagerUserName, barNumberOfViews, rating, customerReview} = req.body;
    console.log(req.file);
    console.log(req.body);
    
@@ -892,7 +892,9 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
         businessType,
         barImage: req.file.path,   
         barManagerUserName,
-        barNumberOfViews
+        barNumberOfViews,
+        rating,
+        customerReview
          
       });
       res.send({ status: "ok" });
@@ -927,7 +929,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
  app.get('/allbars', (req, res) =>{
   // const { barManagerUserName } = req.params;
   registerBarsAndResturants.find()
-           .select('_id barName barAddress barState barPhone barImage businessType barNumberOfViews barManagerUserName')
+           .select('_id barName barAddress barState barPhone barImage businessType barNumberOfViews barManagerUserName rating customerReview')
            .exec((err, data) =>{
              if (!err) {
                res.json(data);
