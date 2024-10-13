@@ -59,7 +59,7 @@ const barSchema = new mongoose.Schema({
   barNumberOfViews:{type: Number, required: false},
   barManagerUserName:{type: String, required: true},
   rating:{type: String, required: false},
-  customerReview:{type: String, required: false}
+  customerReview:{type: Array, required: false}
 
   
  
