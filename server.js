@@ -906,6 +906,34 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
     }
   });
 
+ // UPDATE BAR IMAGE 
+
+ // Route to update bar image using barName
+app.put("/updatebarimage/:barName", barsUpload.single('barImage'), async (req, res) => {
+  const { barName } = req.params; // Extract barName from the URL params
+
+  try {
+    // Check if a bar with the provided barName exists
+    const bar = await registerBarsAndResturants.findOne({ barName });
+
+    if (!bar) {
+      return res.status(404).json({ status: "error", error: "Bar not found" });
+    }
+
+    // Update the bar's image
+    bar.barImage = req.file.path; // Save the new image path to the database
+
+    // Save the updated bar document
+    await bar.save();
+
+    // Send a success response
+    res.json({ status: "ok", message: "Bar image updated successfully" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: "error", message: "An error occurred while updating the bar image" });
+  }
+});
 
 
   app.post('/incrementViews', async (req, res) => {
@@ -964,6 +992,113 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
      //   console.log(res);
  });
 
+
+// UPDATE BAR NAME
+ app.post("/updateandsavebarname", async (req, res) => {
+  // const productId = req.body._id; 
+   const { id, updatedBarName } = req.body;
+   console.log(req.body);
+   try {
+    registerBarsAndResturants.findByIdAndUpdate(
+           id,
+           { barName: updatedBarName },
+           { new: true },
+           (error, data) => {
+               if (error) {
+                   console.log(error);
+                   res.status(500).send({ status: "error" });
+               } else {
+                   console.log('Updated');
+                   res.send({ status: "ok", data: 'Updated Successfuly' });
+               }
+           }
+       );
+   } catch (error) {
+       console.error(error);
+       res.status(500).send({ status: "error" });
+   }
+});
+
+
+// UPDATE BAR ADDRESS
+
+app.post("/updateandsavebaraddress", async (req, res) => {
+  // const productId = req.body._id; 
+   const { id, updatedBarAddress } = req.body;
+   console.log(req.body);
+   try {
+    registerBarsAndResturants.findByIdAndUpdate(
+           id,
+           { barAddress: updatedBarAddress },
+           { new: true },
+           (error, data) => {
+               if (error) {
+                   console.log(error);
+                   res.status(500).send({ status: "error" });
+               } else {
+                   console.log('Updated');
+                   res.send({ status: "ok", data: 'Updated Successfuly' });
+               }
+           }
+       );
+   } catch (error) {
+       console.error(error);
+       res.status(500).send({ status: "error" });
+   }
+});
+
+// UPDATE BAR PHONE NUMBER
+
+
+app.post("/updateandsavebarphone", async (req, res) => {
+  // const productId = req.body._id; 
+   const { id, updatedBarPhone } = req.body;
+   console.log(req.body);
+   try {
+    registerBarsAndResturants.findByIdAndUpdate(
+           id,
+           { barPhone: updatedBarPhone },
+           { new: true },
+           (error, data) => {
+               if (error) {
+                   console.log(error);
+                   res.status(500).send({ status: "error" });
+               } else {
+                   console.log('Updated');
+                   res.send({ status: "ok", data: 'Updated Successfuly' });
+               }
+           }
+       );
+   } catch (error) {
+       console.error(error);
+       res.status(500).send({ status: "error" });
+   }
+});
+
+
+  // DELETE BAR
+
+  app.delete("/deletebar/:id", async (req, res) => {
+    const { id } = req.params; // Get the product ID from the request parameters
+  
+    try {
+      // Find the product by ID and delete it
+      const deletedBar = await  registerBarsAndResturants.findByIdAndDelete(id);
+  
+      if (!deletedBar) {
+        // If no product is found with the given ID
+        return res.status(404).json({ error: "Bar not found" });
+      }
+  
+      // If product is successfully deleted
+      res.json({ status: "ok", message: "Bar deleted successfully" });
+    } catch (error) {
+      // Handle any errors
+      console.error(error);
+      res.status(500).json({ status: "error", message: "An error occurred while deleting the bar" });
+    }
+  });
+
  // BAR NUMBER OF VIEWS
 
  app.post('/incrementViews', async (req, res) => {
@@ -1016,7 +1151,31 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
  
    });
 
-  
+//  DELETE BAR PRODUCTS
+
+
+// Route to delete a product using product ID
+app.delete("/deletebarproduct/:id", async (req, res) => {
+  const { id } = req.params; // Get the product ID from the request parameters
+
+  try {
+    // Find the product by ID and delete it
+    const deletedProduct = await BarProduct.findByIdAndDelete(id);
+
+    if (!deletedProduct) {
+      // If no product is found with the given ID
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // If product is successfully deleted
+    res.json({ status: "ok", message: "Product deleted successfully" });
+  } catch (error) {
+    // Handle any errors
+    console.error(error);
+    res.status(500).json({ status: "error", message: "An error occurred while deleting the product" });
+  }
+});
+
    // RETRIEVE ALL BAR PRODUCTS
 
   
