@@ -780,6 +780,32 @@ app.get('/mobiledrughistorylist', (req, res) =>{
  
    });
 
+   app.post("/updatepassword", async (req, res) => {
+    const { uname, newPassword } = req.body;
+
+    // Hash the new password
+    const encryptedPassword = await bcrypt.hash(newPassword, 10);
+
+    try {
+        // Find the user by their username (uname)
+        const user = await BarManager.findOne({ uname });
+
+        if (!user) {
+            return res.json({ error: "User not found" });
+        }
+
+        // Update the password
+        await BarManager.updateOne(
+            { uname },
+            { $set: { password: encryptedPassword } }
+        );
+
+        res.send({ status: "Password updated successfully" });
+    } catch (error) {
+        res.send({ status: "error", message: error.message });
+    }
+});
+
   app.post("/loginbarmanager", async(req, res)=>{
     const {uname, password } = req.body;
     const user = await BarManager.findOne({uname});
