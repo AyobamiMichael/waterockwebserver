@@ -935,7 +935,7 @@ const barsUpload = multer({storage: storageOfBarsResturantsImage,
  // UPDATE BAR IMAGE 
 
  // Route to update bar image using barName
-app.put("/updatebarimage/:barName", barsUpload.single('barImage'), async (req, res) => {
+app.post("/updatebarimage/:barName", barsUpload.single('barImage'), async (req, res) => {
   const { barName } = req.params; // Extract barName from the URL params
 
   try {
