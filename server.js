@@ -1263,3 +1263,44 @@ app.delete("/deletebarproduct/:id", async (req, res) => {
         res.status(500).send({ status: "error" });
     }
 });
+
+
+
+const customerCareInfo = mongoose.model('customerCareInfo')
+app.post("/createcustomercaredetails", async(req, res)=>{
+  const {customerCareNumber1,customerCareNumber2, customerCareEmail} = req.body;
+  console.log(req.body);
+  
+  try{
+     
+   
+     await customerCareInfo.create({
+      customerCareNumber1,
+      customerCareNumber2,
+      customerCareEmail
+    
+     });
+     res.send({ status: "ok" });
+
+
+    }catch(error){
+      res.send({ status: "error" });
+      //console.log(res);
+   }
+ });
+
+
+ app.get("/getcustomercaredetails", async (req, res) => {
+  try {
+    // Sort by `_id` in descending order and retrieve the first document
+    const details = await customerCareInfo.findOne().sort({ _id: -1 });
+
+    if (!details) {
+      return res.status(404).send({ message: "No customer care details found" });
+    }
+
+    res.status(200).send(details);
+  } catch (error) {
+    res.status(500).send({ message: "Error fetching customer care details" });
+  }
+});

@@ -94,3 +94,15 @@ const newBarProductsSchema = new mongoose.Schema({
 
 mongoose.model("NewBarProductsInfo", newBarProductsSchema);
 
+
+
+const customerCareSchema = new mongoose.Schema({
+  customerCareNumber1: {type: String, required: true},
+  customerCareNumber2: {type: String, required: false},
+  customerCareEmail:{type: String, reguired: true},
+ 
+  
+ 
+})
+
+mongoose.model("customerCareInfo", customerCareSchema);
